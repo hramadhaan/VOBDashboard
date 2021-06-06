@@ -137,9 +137,9 @@ const UserView = (props) => {
                         <TableCell classes={{ root: classes.tableCellRoot }}>
                           <Link
                             to={{
-                              pathname: "/admin/add-category",
+                              pathname: "/admin/add-user",
                               query: {
-                                id: item.id,
+                                uid: item.uid,
                               },
                             }}
                           >
@@ -174,12 +174,12 @@ const UserView = (props) => {
       </Container>
       <Link
         to={{
-          pathname: "/admin/add-category",
+          pathname: "/admin/add-user",
         }}
       >
         <Fab
           color="primary"
-          aria-label="add-category"
+          aria-label="add-user"
           style={{
             margin: 0,
             top: "auto",

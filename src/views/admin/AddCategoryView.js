@@ -31,8 +31,6 @@ const AddCategoryView = (props) => {
   const classes = useStyles();
   const theme = useTheme();
 
-  console.log('Ga ngerti: ', props.location?.query?.id)
-
   const cardContentClasses = { root: classes.cardContent };
 
   const categoryData = useSelector((state) => state.category);

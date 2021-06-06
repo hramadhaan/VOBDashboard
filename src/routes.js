@@ -19,6 +19,7 @@ import AddCategoryView from "views/admin/AddCategoryView";
 import ArticleView from "views/admin/ArticleView";
 import AddArticleView from "views/admin/AddArticleView";
 import UserView from "views/admin/UserView";
+import AddUserView from "views/admin/AddUserView";
 
 var routes = [
   {
@@ -54,20 +55,27 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: '/add-article',
-    name: 'Tambah Artikel',
+    path: "/add-article",
+    name: "Tambah Artikel",
     component: AddArticleView,
-    layout: '/admin'
+    layout: "/admin",
   },
   { divider: true },
   {
     path: "/user-list",
-    name: "User Management",
+    name: "Pengguna",
     icon: Person,
     iconColor: "WarningLight",
     component: UserView,
     layout: "/admin",
   },
+  {
+    path: "/add-user",
+    name: "Tambah Pengguna",
+    component: AddUserView,
+    layout: "/admin",
+  },
+  { divider: true },
   {
     path: "/tables",
     name: "Notifications",
