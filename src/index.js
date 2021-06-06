@@ -21,6 +21,7 @@ import App from "layouts/App";
 
 import authReducer from "./store/reducers/auth";
 import categoryReducer from "./store/reducers/category";
+import articleReducer from "./store/reducers/article";
 
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
@@ -28,6 +29,7 @@ firebase.analytics();
 const rootReducer = combineReducers({
   auth: authReducer,
   category: categoryReducer,
+  article: articleReducer,
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunk, logger));

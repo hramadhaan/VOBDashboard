@@ -2,28 +2,30 @@ import React from "react";
 // javascipt plugin for creating charts
 import Chart from "chart.js";
 // react plugin used to create charts
-import { Line, Bar } from "react-chartjs-2";
+// import { Line, Bar } from "react-chartjs-2";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import { useTheme } from "@material-ui/core/styles";
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import CardHeader from "@material-ui/core/CardHeader";
-import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Typography from "@material-ui/core/Typography";
-// @material-ui/icons components
-import ArrowDownward from "@material-ui/icons/ArrowDownward";
-import ArrowUpward from "@material-ui/icons/ArrowUpward";
+import { useDispatch } from "react-redux";
+
+// import Box from "@material-ui/core/Box";
+// import Button from "@material-ui/core/Button";
+// import Card from "@material-ui/core/Card";
+// import CardContent from "@material-ui/core/CardContent";
+// import CardHeader from "@material-ui/core/CardHeader";
+// import Container from "@material-ui/core/Container";
+// import Grid from "@material-ui/core/Grid";
+// import LinearProgress from "@material-ui/core/LinearProgress";
+// import Table from "@material-ui/core/Table";
+// import TableBody from "@material-ui/core/TableBody";
+// import TableCell from "@material-ui/core/TableCell";
+// import TableContainer from "@material-ui/core/TableContainer";
+// import TableHead from "@material-ui/core/TableHead";
+// import TableRow from "@material-ui/core/TableRow";
+// import Typography from "@material-ui/core/Typography";
+// // @material-ui/icons components
+// import ArrowDownward from "@material-ui/icons/ArrowDownward";
+// import ArrowUpward from "@material-ui/icons/ArrowUpward";
 
 // core components
 import Header from "components/Headers/Header.js";
@@ -31,11 +33,15 @@ import Header from "components/Headers/Header.js";
 import {
   chartOptions,
   parseOptions,
-  chartExample1,
-  chartExample2,
+  // chartExample1,
+  // chartExample2,
 } from "variables/charts.js";
 
 import componentStyles from "assets/theme/views/admin/dashboard.js";
+
+import * as authAction from "../../store/actions/auth";
+import * as categoryAction from '../../store/actions/category'
+import * as articleAction from '../../store/actions/article'
 
 const useStyles = makeStyles(componentStyles);
 
@@ -49,6 +55,14 @@ function Dashboard() {
     parseOptions(Chart, chartOptions());
   }
 
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    dispatch(authAction.fetchUser());
+    dispatch(categoryAction.fetchCategory())
+    dispatch(articleAction.fetchArticle())
+  }, [dispatch]);
+
   const toggleNavs = (index) => {
     setActiveNav(index);
     setChartExample1Data("data" + index);
@@ -57,7 +71,7 @@ function Dashboard() {
     <>
       <Header />
       {/* Page content */}
-      <Container
+      {/* <Container
         maxWidth={false}
         component={Box}
         marginTop="-6rem"
@@ -770,7 +784,7 @@ function Dashboard() {
             </Card>
           </Grid>
         </Grid>
-      </Container>
+      </Container> */}
     </>
   );
 }

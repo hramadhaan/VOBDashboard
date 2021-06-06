@@ -23,33 +23,31 @@ import Edit from "@material-ui/icons/Edit";
 import Add from "@material-ui/icons/Add";
 
 // REDUX
-import * as categoryAction from "../../store/actions/category";
+import * as articleAction from "../../store/actions/article";
 import FormModal from "components/FormModal";
 import { Link } from "react-router-dom";
 
-import Lottie from 'lottie-react'
-import loadingComponent from '../../components/LottieJSON/loading.json'
+import Lottie from "lottie-react";
+import loadingComponent from "../../components/LottieJSON/loading.json";
 
 const useStyles = makeStyles(componentStyles);
 
-const CategoryView = (props) => {
+const ArticleView = (props) => {
   const classes = useStyles();
   const theme = useTheme();
 
   const [modal, setModal] = useState(false);
   const [modalEdit, setModalEdit] = useState(false);
 
-  const [idCategory, setIdCategory] = useState(null);
-
-  const categoryState = useSelector((state) => state.category);
-
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    dispatch(categoryAction.fetchCategory());
+    dispatch(articleAction.fetchArticle());
   }, [dispatch]);
 
+  const article = useSelector((state) => state.article);
   const category = useSelector((state) => state.category);
+  const auth = useSelector((state) => state.auth);
 
   let render = (
     <>
@@ -91,7 +89,7 @@ const CategoryView = (props) => {
                         classes.tableCellRoot + " " + classes.tableCellRootHead,
                     }}
                   >
-                    Nama Kategori
+                    Kategori
                   </TableCell>
                   <TableCell
                     classes={{
@@ -99,7 +97,23 @@ const CategoryView = (props) => {
                         classes.tableCellRoot + " " + classes.tableCellRootHead,
                     }}
                   >
-                    Icon Kategori
+                    Penulis
+                  </TableCell>
+                  <TableCell
+                    classes={{
+                      root:
+                        classes.tableCellRoot + " " + classes.tableCellRootHead,
+                    }}
+                  >
+                    Judul
+                  </TableCell>
+                  <TableCell
+                    classes={{
+                      root:
+                        classes.tableCellRoot + " " + classes.tableCellRootHead,
+                    }}
+                  >
+                    Gambar
                   </TableCell>
                   <TableCell
                     classes={{
@@ -112,27 +126,52 @@ const CategoryView = (props) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {category &&
-                  category.category.map((item, index) => {
+                {article &&
+                  article?.article.map((item, index) => {
+                    const categoryData = category?.category.find(
+                      (cat) => cat.id === item.idCategory
+                    );
+                    const userData = auth?.users.find(
+                      (user) => user.uid === item.idPenulis
+                    );
+
+                    console.log("UserData: ", userData);
                     return (
                       <TableRow key={`item-table=${index}`}>
                         <TableCell classes={{ root: classes.tableCellRoot }}>
                           {index + 1}
                         </TableCell>
                         <TableCell classes={{ root: classes.tableCellRoot }}>
-                          {item.name}
+                          {category && categoryData.name}
+                        </TableCell>
+                        <TableCell classes={{ root: classes.tableCellRoot }}>
+                          {/* <Avatar
+                            classes={{ root: classes.avatarRoot }}
+                            alt="..."
+                            src={auth && userData.photoURL}
+                          /> */}
+                          {auth && userData?.displayName}
+                        </TableCell>
+                        <TableCell classes={{ root: classes.tableCellRoot }}>
+                          {/* <Avatar
+                            classes={{ root: classes.avatarRoot }}
+                            alt="..."
+                            src={auth && userData.photoURL}
+                          /> */}
+                          {item.judul}
                         </TableCell>
                         <TableCell classes={{ root: classes.tableCellRoot }}>
                           <Avatar
                             classes={{ root: classes.avatarRoot }}
                             alt="..."
-                            src={item.image}
+                            src={item.imageUrl}
                           />
+                          {/* {item.judul} */}
                         </TableCell>
                         <TableCell classes={{ root: classes.tableCellRoot }}>
                           <Link
                             to={{
-                              pathname: "/admin/add-category",
+                              pathname: "/admin/add-article",
                               query: {
                                 id: item.id,
                               },
@@ -148,7 +187,6 @@ const CategoryView = (props) => {
                               minWidth="2rem!important"
                               minHeight="2rem!important"
                               onClick={() => {
-                                setIdCategory(`${item.name}`);
                                 setModalEdit(true);
                               }}
                             >
@@ -173,12 +211,12 @@ const CategoryView = (props) => {
       </Container>
       <Link
         to={{
-          pathname: "/admin/add-category",
+          pathname: "/admin/add-article",
         }}
       >
         <Fab
           color="primary"
-          aria-label="add-category"
+          aria-label="add-article"
           style={{
             margin: 0,
             top: "auto",
@@ -194,7 +232,7 @@ const CategoryView = (props) => {
     </>
   );
 
-  if (category.loading) {
+  if (article.loading) {
     render = (
       <div
         style={{
@@ -215,26 +253,6 @@ const CategoryView = (props) => {
       </div>
     );
   }
-
-  const formEditKategori = () => {
-    const categoryId = categoryState.category.find(
-      (item) => item.id === idCategory
-    );
-    return (
-      <FormModal
-        title="Edit Kategori"
-        open={modalEdit}
-        handleClose={() => {
-          setModalEdit(false);
-          setIdCategory(null);
-        }}
-      >
-        <div>
-          <p>{categoryId && categoryId?.name}</p>
-        </div>
-      </FormModal>
-    );
-  };
 
   const formTambahKategori = () => {
     return (
@@ -261,9 +279,8 @@ const CategoryView = (props) => {
       <Header />
       {render}
       {formTambahKategori()}
-      {idCategory && formEditKategori()}
     </>
   );
 };
 
-export default CategoryView;
+export default ArticleView;

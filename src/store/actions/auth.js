@@ -1,11 +1,14 @@
 import firebase from "firebase";
 import swal from "sweetalert";
 
+import User from "models/User";
+
 export const AUTH_START = "AUTH_START";
 export const AUTH_LOGIN = "AUTH_LOGIN";
 export const AUTH_LOGOUT = "AUTH_LOGOUT";
 export const AUTH_FAIL = "AUTH_FAIL";
 export const AUTH_AUTHENTICATED = "AUTH_AUTHENTICATED";
+export const AUTH_FETCH = "AUTH_FETCH";
 
 export const profile = (uid) => {
   return async (dispatch) => {
@@ -67,6 +70,11 @@ export const register = (email, password, name, image) => {
           },
           (err) => {
             console.log("Error: ", err);
+            swal({
+              title: "Register gagal",
+              text: "Gagal dalam melakukan proses upload foto profil",
+              icon: "error",
+            });
           },
           () => {
             firebase
@@ -90,6 +98,11 @@ export const register = (email, password, name, image) => {
         dispatch({
           type: AUTH_FAIL,
           error: err.message,
+        });
+        swal({
+          title: "Register gagal",
+          text: `${err.message}`,
+          icon: "error",
         });
       });
   };
@@ -144,5 +157,39 @@ export const authCheckState = () => {
         });
       }
     });
+  };
+};
+
+export const fetchUser = () => {
+  return async (dispatch) => {
+    dispatch({
+      type: AUTH_START,
+    });
+
+    firebase
+      .database()
+      .ref("User")
+      .once("value")
+      .then((result) => {
+        const loadedUser = [];
+        result.forEach((snapshot) => {
+          const key = snapshot.key;
+          const data = snapshot.val();
+
+          loadedUser.push(
+            new User(key, data.photoURL, data.email, data.displayName, data.typeUser)
+          );
+        });
+        dispatch({
+          type: AUTH_FETCH,
+          payload: loadedUser,
+        });
+      })
+      .catch((err) =>
+        dispatch({
+          type: AUTH_FAIL,
+          error: err,
+        })
+      );
   };
 };

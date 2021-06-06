@@ -3,6 +3,7 @@ import {
   AUTH_LOGIN,
   AUTH_LOGOUT,
   AUTH_START,
+  AUTH_FETCH,
 } from "../actions/auth";
 
 const initialState = {
@@ -14,6 +15,7 @@ const initialState = {
   loading: false,
   error: null,
   authenticated: false,
+  users: [],
 };
 
 export default (state = initialState, action) => {
@@ -25,6 +27,7 @@ export default (state = initialState, action) => {
       };
     case AUTH_LOGIN:
       return {
+        ...state,
         loading: false,
         uid: action.uid,
         email: action.email,
@@ -49,6 +52,13 @@ export default (state = initialState, action) => {
         typeUser: null,
         error: null,
         authenticated: false,
+      };
+    case AUTH_FETCH:
+      return {
+        ...state,
+        users: action.payload,
+        loading: false,
+        error: null,
       };
     default:
       return state;

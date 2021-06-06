@@ -48,14 +48,12 @@ const componentStyles = (theme) => ({
     top: "2px",
   },
   divider: {
-    marginBottom: "1rem",
-    marginTop: "1rem",
     marginLeft: "1.5rem",
     marginRight: "1.5rem",
   },
   title: {
-    paddingTop: ".25rem",
-    paddingBottom: ".25rem",
+    paddingTop: ".12rem",
+    paddingBottom: ".12rem",
     fontSize: ".75rem",
     textTransform: "uppercase",
     letterSpacing: ".04em",
