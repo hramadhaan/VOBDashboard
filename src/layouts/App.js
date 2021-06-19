@@ -21,7 +21,7 @@ const App = (props) => {
     </Switch>
   );
 
-  if (!auth.authenticated && !auth.loading) {
+  if (!auth.authenticated ) {
     render = (
       <Switch>
         <Route path="/auth" render={(props) => <AuthLayout {...props} />} />

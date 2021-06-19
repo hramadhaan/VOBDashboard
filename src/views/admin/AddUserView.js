@@ -20,6 +20,7 @@ import Lottie from "lottie-react";
 import componentStyles from "../../assets/theme/views/admin/profile";
 import Header from "../../components/Headers/Header";
 import loadingComponent from "../../components/LottieJSON/loading.json";
+import * as authAction from "../../store/actions/auth";
 
 const useStyles = makeStyles(componentStyles);
 
@@ -39,14 +40,16 @@ const AddUserView = (props) => {
   const [data, setData] = useState({
     email: null,
     password: null,
-    typeUser: authData.typeUser ? authData.typeUser : null,
+    typeUser: authData?.typeUser ? authData?.typeUser : null,
     displayName: null,
     photoURL: null,
   });
 
   const submitHandler = () => {};
 
-  const deleteHandler = () => {};
+  const deleteHandler = (id, imageUrl) => {
+    dispatch(authAction.deleteUser(id, imageUrl));
+  };
 
   let renderContent = (
     <Card
@@ -125,7 +128,6 @@ const AddUserView = (props) => {
               });
             }}
             value={data.typeUser}
-            defaultValue={"2"}
           >
             <MenuItem value="1">Admin</MenuItem>
             <MenuItem value="2">User</MenuItem>
@@ -211,7 +213,7 @@ const AddUserView = (props) => {
               fullWidth
               onClick={(event) => {
                 event.preventDefault();
-                deleteHandler();
+                deleteHandler(authData?.uid, authData?.photoURL);
               }}
             >
               Delete

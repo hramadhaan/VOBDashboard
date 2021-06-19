@@ -2,6 +2,7 @@ import firebase from "firebase";
 import swal from "sweetalert";
 
 import User from "models/User";
+import axios from "axios";
 
 export const AUTH_START = "AUTH_START";
 export const AUTH_LOGIN = "AUTH_LOGIN";
@@ -9,6 +10,7 @@ export const AUTH_LOGOUT = "AUTH_LOGOUT";
 export const AUTH_FAIL = "AUTH_FAIL";
 export const AUTH_AUTHENTICATED = "AUTH_AUTHENTICATED";
 export const AUTH_FETCH = "AUTH_FETCH";
+export const AUTH_DELETE = "AUTH_DELETE";
 
 export const profile = (uid) => {
   return async (dispatch) => {
@@ -146,17 +148,26 @@ export const logout = () => {
 
 export const authCheckState = () => {
   return async (dispatch) => {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        console.log("masih masuk");
-        dispatch(profile(user.uid));
-        // console.log(user.)
-      } else {
-        dispatch({
-          type: AUTH_LOGOUT,
-        });
-      }
-    });
+    // firebase.auth().onAuthStateChanged(async (user) => {
+    //   if (user) {
+    //     console.log("masih masuk");
+    //     dispatch(profile(user.uid));
+    //     // console.log(user.)
+    //   } else {
+    //     dispatch({
+    //       type: AUTH_LOGOUT,
+    //     });
+    //   }
+    // });
+    const uid = localStorage.getItem('uid')
+    if (uid) {
+      dispatch(profile(uid))
+      console.log('Login')
+    } else {
+      dispatch({
+        type: AUTH_LOGOUT
+      })
+    }
   };
 };
 
@@ -177,7 +188,13 @@ export const fetchUser = () => {
           const data = snapshot.val();
 
           loadedUser.push(
-            new User(key, data.photoURL, data.email, data.displayName, data.typeUser)
+            new User(
+              key,
+              data.photoURL,
+              data.email,
+              data.displayName,
+              data.typeUser
+            )
           );
         });
         dispatch({
@@ -191,5 +208,59 @@ export const fetchUser = () => {
           error: err,
         })
       );
+  };
+};
+
+export const deleteUser = (id, urlImage) => {
+  return async (dispatch) => {
+    dispatch({
+      type: AUTH_START,
+    });
+    try {
+      const response = await axios.get(
+        `https://voice-of-bayyinah-api.herokuapp.com/auth/delete/${id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const resData = response.data;
+
+      if (resData.success === true) {
+        firebase
+          .database()
+          .ref("User")
+          .child(id)
+          .remove()
+          .then(() => {
+            if (urlImage.includes("https://firebasestorage")) {
+              firebase.storage().refFromURL(urlImage).delete();
+            }
+            swal({
+              title: `${resData.message}`,
+              icon: "success",
+            });
+            dispatch({
+              type: AUTH_DELETE,
+            });
+          })
+          .catch((err) => {
+            dispatch({
+              type: AUTH_FAIL,
+              error: err,
+            });
+          });
+      } else {
+        swal({
+          title: `${resData.message}`,
+          text: `${resData.errors.message}`,
+          icon: "error",
+        });
+      }
+    } catch (err) {
+      console.log("Error: ", err);
+    }
   };
 };
