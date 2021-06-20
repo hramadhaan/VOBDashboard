@@ -11,6 +11,7 @@ export const AUTH_FAIL = "AUTH_FAIL";
 export const AUTH_AUTHENTICATED = "AUTH_AUTHENTICATED";
 export const AUTH_FETCH = "AUTH_FETCH";
 export const AUTH_DELETE = "AUTH_DELETE";
+export const AUTH_UPDATE = "AUTH_UPDATE"
 
 export const profile = (uid) => {
   return async (dispatch) => {
@@ -91,6 +92,17 @@ export const register = (email, password, name, image) => {
                   photoURL: res,
                   typeUser: 1,
                   uid: user.uid,
+                }).then(() => {
+                  swal({
+                    title: 'Register Berhasil',
+                    text: 'Harap keluar dan lalu login kembali',
+                    icon: 'success',
+                    buttons: {
+                      iya: 'Logout'
+                    }
+                  }).then(value => {
+                    dispatch(logout())
+                  })
                 });
               });
           }
@@ -264,3 +276,26 @@ export const deleteUser = (id, urlImage) => {
     }
   };
 };
+
+export const updateUser = (id, typeUser) => {
+  return async dispatch => {
+    dispatch({
+      type: AUTH_START
+    })
+
+    firebase.database().ref('User').child(id).update({ typeUser: typeUser }).then(res => {
+      swal({
+        title: `Berhasil mengupdate profile`,
+        icon: 'success'
+      })
+      dispatch({
+        type: AUTH_UPDATE,
+        id: id,
+        typeUser: typeUser
+      })
+    }).catch(err => dispatch({
+      type: AUTH_FAIL,
+      error: err
+    }))
+  }
+}

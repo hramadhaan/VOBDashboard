@@ -60,16 +60,6 @@ function Login() {
               marginBottom="1rem"
               fontSize="1rem"
             >
-              <Button
-                color="primary"
-                variant="contained"
-                onClick={(event) => {
-                  event.preventDefault();
-                  showModal(true);
-                }}
-              >
-                this button for dev register
-              </Button>
             </Box>
             <FormControl
               variant="filled"

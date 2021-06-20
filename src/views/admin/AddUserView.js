@@ -40,12 +40,20 @@ const AddUserView = (props) => {
   const [data, setData] = useState({
     email: null,
     password: null,
-    typeUser: authData?.typeUser ? authData?.typeUser : null,
+    typeUser: authData?.typeUser ?? null,
     displayName: null,
     photoURL: null,
   });
 
-  const submitHandler = () => {};
+  const submitHandler = () => {
+    if (authData) {
+      // alert('Update')
+      dispatch(authAction.updateUser(authData.uid, data.typeUser))
+    } else {
+      // alert('Register')
+      dispatch(authAction.register(data.email, data.password, data.displayName, data.photoURL))
+    }
+  };
 
   const deleteHandler = (id, imageUrl) => {
     dispatch(authAction.deleteUser(id, imageUrl));
@@ -113,7 +121,7 @@ const AddUserView = (props) => {
             }}
           />
         </FormControl>
-        <FormLabel>Penulis</FormLabel>
+        <FormLabel>Role</FormLabel>
         <FormControl
           variant="filled"
           component={Box}
