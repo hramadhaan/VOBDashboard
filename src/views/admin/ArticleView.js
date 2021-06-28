@@ -121,6 +121,14 @@ const ArticleView = (props) => {
                         classes.tableCellRoot + " " + classes.tableCellRootHead,
                     }}
                   >
+                    Waktu
+                  </TableCell>
+                  <TableCell
+                    classes={{
+                      root:
+                        classes.tableCellRoot + " " + classes.tableCellRootHead,
+                    }}
+                  >
                     Action
                   </TableCell>
                 </TableRow>
@@ -167,6 +175,9 @@ const ArticleView = (props) => {
                             src={item.imageUrl}
                           />
                           {/* {item.judul} */}
+                        </TableCell>
+                        <TableCell classes={{ root: classes.tableCellRoot }}>
+                          {item.time.replace('pukul ','').replace('.',':')}
                         </TableCell>
                         <TableCell classes={{ root: classes.tableCellRoot }}>
                           <Link
