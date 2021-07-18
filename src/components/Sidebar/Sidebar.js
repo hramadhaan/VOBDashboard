@@ -124,24 +124,28 @@ export default function Sidebar({ routes, logo, dropdown, input }) {
       }
     });
   };
-  let logoImage = (
-    <img alt={logo.imgAlt} className={classes.logoClasses} src={logo.imgSrc} />
-  );
-  let logoObject =
-    logo && logo.innerLink ? (
-      <Link to={logo.innerLink} className={classes.logoLinkClasses}>
-        {logoImage}
-      </Link>
-    ) : logo && logo.outterLink ? (
-      <a href={logo.outterLink} className={classes.logoLinkClasses}>
-        {logoImage}
-      </a>
-    ) : null;
+  // let logoImage = (
+  //   <img alt={logo.imgAlt} className={classes.logoClasses} src={logo.imgSrc} />
+  // );
+  // let logoObject =
+  //   logo && logo.innerLink ? (
+  //     <Link to={logo.innerLink} className={classes.logoLinkClasses}>
+  //       {logoImage}
+  //     </Link>
+  //   ) : logo && logo.outterLink ? (
+  //     <a href={logo.outterLink} className={classes.logoLinkClasses}>
+  //       {logoImage}
+  //     </a>
+  //   ) : null;
   return (
     <>
       <Hidden smDown implementation="css">
         <Drawer variant="permanent" anchor="left" open>
-          <Box paddingBottom="1rem">{logoObject}</Box>
+          <Box>
+            <Link to='/admin/index' className={classes.logoLinkClasses}>
+              <Typography className={classes.logoClasses} align='center' variant='h3'>VOB Dashboard</Typography>
+            </Link>
+          </Box>
           <List classes={{ root: classes.listRoot }}>
             {createLinks(routes)}
           </List>
@@ -168,7 +172,9 @@ export default function Sidebar({ routes, logo, dropdown, input }) {
                 aria-haspopup="true"
                 onClick={handleMenuOpen}
               />
-              {logoObject}
+              <Link to='/admin/index' className={classes.logoLinkClasses}>
+                <Typography className={classes.logoClasses} align='center' variant='h3'>VOB Dashboard</Typography>
+              </Link>
               {dropdown}
             </Container>
           </Toolbar>
@@ -192,7 +198,9 @@ export default function Sidebar({ routes, logo, dropdown, input }) {
             paddingBottom="1rem"
             className={classes.outlineNone}
           >
-            {logoObject}
+            <Link to='/admin/index' className={classes.logoLinkClasses}>
+              <Typography className={classes.logoClasses} align='center' variant='h3'>VOB Dashboard</Typography>
+            </Link>
             <Box
               component={Clear}
               width="2rem!important"

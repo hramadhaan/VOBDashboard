@@ -33,13 +33,13 @@ export default function AuthNavbar() {
             component={Box}
             maxWidth="xl"
           >
-            <Box
+            {/* <Box
               alt="..."
               height="30px"
               component="img"
               className={classes.headerImg}
               src={require("assets/img/brand/argon-react-white.png").default}
-            />
+            /> */}
           </Container>
         </Toolbar>
       </AppBar>

@@ -59,11 +59,11 @@ function Dashboard() {
 
   const dispatch = useDispatch();
 
-  const article = useSelector(state => state.article.article)
+  const article = useSelector(state => state.article)
   const auth = useSelector(state => state.auth)
   const category = useSelector((state) => state.category);
 
-  const filterArticle = article?.filter(article => article.idPenulis === auth.uid)
+  const filterArticle = article?.article?.filter(article => article.idPenulis === auth.uid)
 
   React.useEffect(() => {
     dispatch(authAction.fetchUser());

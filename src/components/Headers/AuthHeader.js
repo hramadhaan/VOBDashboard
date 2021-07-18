@@ -30,17 +30,7 @@ const AuthHeader = () => {
               justifyContent="center"
               color={theme.palette.white.main}
             >
-              <Grid item lg={5} md={6} xs={12}>
-                <h1>Assalamu'alaikum,</h1>
-                <Box
-                  component="p"
-                  color={theme.palette.gray[400]}
-                  lineHeight="1.7"
-                  fontSize="1rem"
-                >
-                  Yuk ucapkan Bismillah dulu :)
-                </Box>
-              </Grid>
+             
             </Box>
           </Box>
         </Container>
