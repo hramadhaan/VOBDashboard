@@ -52,7 +52,7 @@ const UserView = (props) => {
         <Card classes={{ root: classes.cardRoot }}>
           <CardHeader
             className={classes.cardHeader}
-            title="Kategori Artikel"
+            title="Pengguna"
             titleTypographyProps={{
               component: Box,
               marginBottom: "0!important",
@@ -128,9 +128,9 @@ const UserView = (props) => {
                           />
                         </TableCell>
                         <TableCell classes={{ root: classes.tableCellRoot }}>
-                          {item.typeUser === "1"
+                          {item.typeUser === "1" || item.typeUser === 1
                             ? "Admin"
-                            : item.typeUser === "2"
+                            : item.typeUser === "2" || item.typeUser === 2
                             ? "User"
                             : null}
                         </TableCell>

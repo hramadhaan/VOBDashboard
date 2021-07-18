@@ -62,7 +62,7 @@ const CategoryView = (props) => {
         <Card classes={{ root: classes.cardRoot }}>
           <CardHeader
             className={classes.cardHeader}
-            title="Kategori Artikel"
+            title="Kategori"
             titleTypographyProps={{
               component: Box,
               marginBottom: "0!important",

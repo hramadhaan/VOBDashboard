@@ -185,15 +185,7 @@ const AddCategoryView = (props) => {
               fullWidth
               onClick={(event) => {
                 event.preventDefault();
-                if (data.name === null) {
-                  swal({
-                    title: "Data tidak berhasil diunggah",
-                    text: "Harap mengisi nama kategori",
-                    icon: "warning",
-                  });
-                } else {
-                  submitHandler();
-                }
+                submitHandler()
               }}
             >
               <Box

@@ -14,9 +14,9 @@ export const ARTICLE_DELETE = "ARTICLE_DELETE";
 // INTERNAL FUNCTION
 const firebaseDatabase = (id) => {
   if (id) {
-    return firebase.database().ref("Article").child(id);
+    return firebase.database().ref("artikel").child(id);
   } else {
-    return firebase.database().ref("Article");
+    return firebase.database().ref("artikel");
   }
 };
 
@@ -42,20 +42,20 @@ export const fetchArticle = () => {
               key,
               data.countView,
               data.hashtag,
-              data.idCategory,
+              data.kategori,
               data.idPenulis,
               data.imageUrl,
               data.judul,
               data.partOne,
               data.partTwo,
               data.partThree,
-              data.time
+              data.timeStamp
             )
           );
         });
         dispatch({
           type: ARTICLE_FETCH,
-          payload: loadedArticle,
+          payload: loadedArticle.reverse(),
         });
       })
       .catch((err) => {
@@ -94,18 +94,18 @@ export const addArticle = (data) => {
           .then((res) => {
             firebase
               .database()
-              .ref("Article")
+              .ref("artikel")
               .push({
                 judul: data.judul && data.judul,
                 hashtag: data.hashtag && data.hashtag,
-                idCategory: data.idCategory && data.idCategory,
+                kategori: data.idCategory && data.idCategory,
                 idPenulis: data.idPenulis && data.idPenulis,
                 partOne: data.partOne && data.partOne,
                 partTwo: data.partTwo && data.partTwo,
                 partThree: data.partThree && data.partThree,
                 imageUrl: res,
                 countView: 0,
-                time: time,
+                timeStamp: time,
               })
               .then((res) => {
                 const id = res.key;
@@ -146,28 +146,48 @@ export const updateArticle = (id, data, oldImage) => {
     const selectedArticle = stateArticle.find((cat) => cat.id === id);
     // console.log("State: ", idCategory);
 
+    console.log('Data Picture: ', data.imageUrl)
+
     let url;
 
     if (data.imageUrl) {
-      firebase
-        .storage()
-        .refFromURL(oldImage)
-        .delete()
-        .then(() => {
-          firebaseStorage(data.judul)
-            .put(data.imageUrl)
-            .on(
-              "state_changed",
-              (snapshot) => console.log("Snapshot Update: ", snapshot),
-              (err) => console.log("Error Update: ", err),
-              () => {
-                firebaseStorage(data.judul)
-                  .getDownloadURL()
+
+      firebaseStorage(data.imageUrl.name)
+        .put(data.imageUrl)
+        .on(
+          "state_changed",
+          (snapshot) => console.log("Snapshot Update: ", snapshot),
+          (err) => console.log("Error Update: ", err),
+          () => {
+            firebaseStorage(data.imageUrl.name)
+              .getDownloadURL()
+              .then((res) => {
+                url = res;
+                firebaseDatabase(id)
+                  .update({
+                    judul: data.judul ? data.judul : selectedArticle.judul,
+                    imageUrl: res,
+                    hashtag: data.hashtag
+                      ? data.hashtag
+                      : selectedArticle.hashtag,
+                    partOne: data.partOne
+                      ? data.partOne
+                      : selectedArticle.partOne,
+                    partTwo: data.partTwo
+                      ? data.partTwo
+                      : selectedArticle.partTwo,
+                    partThree: data.partThree
+                      ? data.partThree
+                      : selectedArticle.partThree,
+                  })
                   .then((res) => {
-                    url = res;
-                    firebaseDatabase(id)
-                      .update({
-                        judul: data.judul ? data.judul : selectedArticle.judul,
+                    dispatch({
+                      type: ARTICLE_UPDATE,
+                      id: id,
+                      payload: {
+                        judul: data.judul
+                          ? data.judul
+                          : selectedArticle.judul,
                         imageUrl: res,
                         hashtag: data.hashtag
                           ? data.hashtag
@@ -187,76 +207,40 @@ export const updateArticle = (id, data, oldImage) => {
                         partThree: data.partThree
                           ? data.partThree
                           : selectedArticle.partThree,
-                      })
-                      .then((res) => {
-                        dispatch({
-                          type: ARTICLE_UPDATE,
-                          id: id,
-                          payload: {
-                            judul: data.judul
-                              ? data.judul
-                              : selectedArticle.judul,
-                            imageUrl: res,
-                            hashtag: data.hashtag
-                              ? data.hashtag
-                              : selectedArticle.hashtag,
-                            idCategory: data.idCategory
-                              ? data.idCategory
-                              : selectedArticle.idCategory,
-                            idPenulis: data.idPenulis
-                              ? data.idPenulis
-                              : selectedArticle.idPenulis,
-                            partOne: data.partOne
-                              ? data.partOne
-                              : selectedArticle.partOne,
-                            partTwo: data.partTwo
-                              ? data.partTwo
-                              : selectedArticle.partTwo,
-                            partThree: data.partThree
-                              ? data.partThree
-                              : selectedArticle.partThree,
-                          },
-                        });
-                        swal({
-                          title: "Update data sukses",
-                          text: "Artikel tersebut telah berhasil diubah",
-                          icon: "success",
-                        });
-                      })
-                      .catch((err) =>
-                        dispatch({
-                          type: ARTICLE_FAIL,
-                          error: err,
-                        })
-                      );
+                      },
+                    });
+                    swal({
+                      title: "Update data sukses",
+                      text: "Artikel tersebut telah berhasil diubah",
+                      icon: "success",
+                    });
                   })
-                  .catch((err) => {
-                    console.log("Error: ", err);
+                  .catch((err) =>
                     dispatch({
                       type: ARTICLE_FAIL,
                       error: err,
-                    });
-                  });
-              }
-            );
-        })
-        .catch((err) => dispatch({ type: ARTICLE_FAIL, error: err }));
+                    })
+                  );
+              })
+              .catch((err) => {
+                console.log("Error: ", err);
+                dispatch({
+                  type: ARTICLE_FAIL,
+                  error: err,
+                });
+              });
+          }
+        );
     } else {
       firebaseDatabase(id)
         .update({
-          judul: data.judul ? data.judul : selectedArticle.judul,
-          hashtag: data.hashtag ? data.hashtag : selectedArticle.hashtag,
-          idCategory: data.idCategory
-            ? data.idCategory
-            : selectedArticle.idCategory,
-          idPenulis: data.idPenulis
-            ? data.idPenulis
-            : selectedArticle.idPenulis,
-          partOne: data.partOne ? data.partOne : selectedArticle.partOne,
-          partTwo: data.partTwo ? data.partTwo : selectedArticle.partTwo,
+          judul: data.judul ? data.judul : selectedArticle.judul ?? '',
+          hashtag: data.hashtag ? data.hashtag : selectedArticle.hashtag ?? '',
+          partOne: data.partOne ? data.partOne : selectedArticle.partOne ?? '',
+          partTwo: data.partTwo ? data.partTwo : selectedArticle.partTwo ?? '',
           partThree: data.partThree
             ? data.partThree
-            : selectedArticle.partThree,
+            : selectedArticle.partThree ?? '',
         })
         .then(() => {
           swal({

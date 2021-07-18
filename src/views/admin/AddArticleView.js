@@ -81,24 +81,6 @@ const AddArticleView = (props) => {
   };
 
   const submitHandler = () => {
-    // alert(data.name);
-    // if (selectedData) {
-    //   // do update
-    //   // dispatch(
-    //   //   articleAction.updateArticle(
-    //   //     props.location?.query?.id,
-    //   //     data,
-    //   //     selectedData.image
-    //   //   )
-    //   // );
-    //   // alert(data)
-    //   // console.log('Submit: ', data)
-    // } else {
-    //   // dispatch(categoryAction.addCategory(data));
-    //   dispatch(articleAction.addArticle(data));
-    // }
-    // dispatch(articleAction.addArticle(data));
-
     if (selectedData) {
       dispatch(
         articleAction.updateArticle(
@@ -165,7 +147,11 @@ const AddArticleView = (props) => {
             width="100%"
             marginBottom="1rem!important"
           >
-            <Select
+            {selectedData ? <FilledInput
+              type="text"
+              disabled
+              value={selectedData && categoryData.category.find(cat => cat.id === selectedData.idCategory).name}
+            /> : <Select
               onChange={(event) => {
                 setData({
                   ...data,
@@ -182,7 +168,7 @@ const AddArticleView = (props) => {
                     </MenuItem>
                   );
                 })}
-            </Select>
+            </Select>}
           </FormControl>
           <FormLabel>Penulis</FormLabel>
           <FormControl
@@ -191,7 +177,12 @@ const AddArticleView = (props) => {
             width="100%"
             marginBottom="1rem!important"
           >
-            <Select
+            {selectedData ? <FilledInput
+              type="text"
+              disabled
+              value={selectedData && selectedData.idPenulis}
+              defaultValue={selectedData && selectedData.idPenulis}
+            /> : <Select
               onChange={(event) => {
                 setData({
                   ...data,
@@ -209,7 +200,7 @@ const AddArticleView = (props) => {
                     </MenuItem>
                   );
                 })}
-            </Select>
+            </Select>}
           </FormControl>
           <FormLabel>Part Satu</FormLabel>
           <FormControl
@@ -338,21 +329,25 @@ const AddArticleView = (props) => {
               fullWidth
               onClick={(event) => {
                 event.preventDefault();
-                if (
-                  data.judul === null ||
-                  data.partOne === null ||
-                  data.imageUrl === null ||
-                  data.hashtag === null ||
-                  data.idCategory === null ||
-                  data.idPenulis === null
-                ) {
-                  swal({
-                    title: "Data tidak berhasil diunggah",
-                    text: "Harap mengisi isi beberapa field",
-                    icon: "warning",
-                  });
-                } else {
+                if (selectedData) {
                   submitHandler();
+                } else {
+                  if (
+                    data.judul === null ||
+                    data.partOne === null ||
+                    data.imageUrl === null ||
+                    data.hashtag === null ||
+                    data.idCategory === null ||
+                    data.idPenulis === null
+                  ) {
+                    swal({
+                      title: "Data tidak berhasil diunggah",
+                      text: "Harap mengisi isi beberapa field",
+                      icon: "warning",
+                    });
+                  } else {
+                    submitHandler();
+                  }
                 }
               }}
             >
