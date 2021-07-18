@@ -12,9 +12,9 @@ export const CATEGORY_DELETE = "CATEGORY_DELETE";
 // INTERNAL FUNCTION
 const firebaseDatabase = (id) => {
   if (id) {
-    return firebase.database().ref("Category").child(id);
+    return firebase.database().ref("kategori").child(id);
   } else {
-    return firebase.database().ref("Category");
+    return firebase.database().ref("kategori");
   }
 };
 
@@ -30,18 +30,18 @@ export const fetchCategory = () => {
     });
     firebase
       .database()
-      .ref("Category")
+      .ref("kategori")
       .once("value")
       .then((result) => {
         const loadedCategory = [];
         result.forEach((snapshot) => {
           const key = snapshot.key;
           const data = snapshot.val();
-          loadedCategory.push(new Category(key, data.name, data.image));
+          loadedCategory.push(new Category(key, data.nama, data.image));
         });
         dispatch({
           type: CATEGORY_FETCH,
-          payload: loadedCategory,
+          payload: loadedCategory.reverse(),
         });
       })
       .catch((err) => {
@@ -77,13 +77,14 @@ export const addCategory = (data) => {
           .then((res) => {
             firebase
               .database()
-              .ref("Category")
+              .ref("kategori")
               .push({
-                name: data.name,
+                nama: data.name,
                 image: res,
               })
               .then((res) => {
                 const id = res.key;
+                swal('Berhasil ditambahkan', 'Anda berhasil menambahkan kategori', 'success')
                 dispatch({
                   type: CATEGORY_CREATE,
                   payload: {
@@ -93,14 +94,16 @@ export const addCategory = (data) => {
                   },
                 });
               })
-              .catch((err) =>
+              .catch((err) => {
+                swal('Gagal', 'Gagal menambahkan kategori', 'error');
                 dispatch({
                   type: CATEGORY_FAIL,
                   error: err,
                 })
+              }
               );
           })
-          .catch((err) => dispatch({ type: CATEGORY_FAIL, error: err }));
+          .catch((err) => { dispatch({ type: CATEGORY_FAIL, error: err }); swal('Gagal', 'Gagal menambahkan kategori', 'error') });
       }
     );
   };
@@ -118,64 +121,57 @@ export const updateCategory = (id, data, oldImage) => {
     let url;
 
     if (data.image) {
-      firebase
-        .storage()
-        .refFromURL(oldImage)
-        .delete()
-        .then(() => {
-          firebaseStorage(data.name)
-            .put(data.image)
-            .on(
-              "state_changed",
-              (snapshot) => console.log("Snapshot Update: ", snapshot),
-              (err) => console.log("Error Update: ", err),
-              () => {
-                firebaseStorage(data.name)
-                  .getDownloadURL()
-                  .then((res) => {
-                    url = res;
-                    firebaseDatabase(id)
-                      .update({
-                        name: data.name,
-                        image: res,
-                      })
-                      .then((res) => {
-                        dispatch({
-                          type: CATEGORY_UPDATE,
-                          id: id,
-                          payload: {
-                            name: data.name,
-                            image: url,
-                          },
-                        });
-                        swal({
-                          title: "Update data sukses",
-                          text: "Kategori tersebut telah berhasil diubah",
-                          icon: "success",
-                        });
-                      })
-                      .catch((err) =>
-                        dispatch({
-                          type: CATEGORY_FAIL,
-                          error: err,
-                        })
-                      );
+      firebaseStorage(data.image.name)
+        .put(data.image)
+        .on(
+          "state_changed",
+          (snapshot) => console.log("Snapshot Update: ", snapshot),
+          (err) => console.log("Error Update: ", err),
+          () => {
+            firebaseStorage(data.image.name)
+              .getDownloadURL()
+              .then((res) => {
+                url = res;
+                firebaseDatabase(id)
+                  .update({
+                    nama: data.name ? data.name : idCategory.name,
+                    image: res,
                   })
-                  .catch((err) => {
-                    console.log("Error: ", err);
+                  .then((res) => {
+                    dispatch({
+                      type: CATEGORY_UPDATE,
+                      id: id,
+                      payload: {
+                        name: data.name ? data.name : idCategory.name,
+                        image: url,
+                      },
+                    });
+                    swal({
+                      title: "Update data sukses",
+                      text: "Kategori tersebut telah berhasil diubah",
+                      icon: "success",
+                    });
+                  })
+                  .catch((err) =>
                     dispatch({
                       type: CATEGORY_FAIL,
                       error: err,
-                    });
-                  });
-              }
-            );
-        })
-        .catch((err) => dispatch({ type: CATEGORY_FAIL, error: err }));
+                    })
+                  );
+              })
+              .catch((err) => {
+                console.log("Error: ", err);
+                dispatch({
+                  type: CATEGORY_FAIL,
+                  error: err,
+                });
+              });
+          }
+        );
     } else {
       firebaseDatabase(id)
         .update({
-          name: data.name,
+          nama: data.name,
         })
         .then(() => {
           swal({

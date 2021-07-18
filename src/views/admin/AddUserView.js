@@ -116,6 +116,7 @@ const AddUserView = (props) => {
             type="text"
             placeholder="Nama"
             defaultValue={authData && authData.displayName}
+            disabled={authData ? true : false}
             onChange={(value) => {
               setData({ ...data, displayName: value.target.value });
             }}

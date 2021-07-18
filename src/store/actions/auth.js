@@ -152,6 +152,7 @@ export const login = (email, password) => {
 export const logout = () => {
   return async (dispatch) => {
     firebase.auth().signOut();
+    localStorage.removeItem('uid')
     dispatch({
       type: AUTH_LOGOUT,
     });

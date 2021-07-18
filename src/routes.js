@@ -5,10 +5,10 @@ import Login from "views/auth/Login.js";
 // import Maps from "views/admin/Maps.js";
 // import Profile from "views/admin/Profile.js";
 import Register from "views/auth/Register.js";
-import Tables from "views/admin/Tables.js";
+// import Tables from "views/admin/Tables.js";
 // @material-ui/icons components
 // import AccountCircle from "@material-ui/icons/AccountCircle";
-import FormatListBulleted from "@material-ui/icons/FormatListBulleted";
+// import FormatListBulleted from "@material-ui/icons/FormatListBulleted";
 import Grain from "@material-ui/icons/Grain";
 import LocationOn from "@material-ui/icons/LocationOn";
 import Person from "@material-ui/icons/Person";
@@ -32,7 +32,7 @@ var routes = [
   },
   { divider: true },
   {
-    path: "/icons",
+    path: "/category",
     name: "Kategori",
     icon: Grain,
     iconColor: "Primary",
@@ -47,7 +47,7 @@ var routes = [
   },
   { divider: true },
   {
-    path: "/maps",
+    path: "/article",
     name: "Artikel",
     icon: LocationOn,
     iconColor: "Warning",
@@ -76,14 +76,14 @@ var routes = [
     layout: "/admin",
   },
   { divider: true },
-  {
-    path: "/tables",
-    name: "Notifications",
-    icon: FormatListBulleted,
-    iconColor: "Error",
-    component: Tables,
-    layout: "/admin",
-  },
+  // {
+  //   path: "/tables",
+  //   // name: "Notifications",
+  //   // icon: FormatListBulleted,
+  //   // iconColor: "Error",
+  //   component: Tables,
+  //   layout: "/admin",
+  // },
   {
     path: "/login",
     // name: "Login",

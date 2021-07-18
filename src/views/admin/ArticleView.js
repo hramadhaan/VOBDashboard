@@ -29,6 +29,8 @@ import { Link } from "react-router-dom";
 
 import Lottie from "lottie-react";
 import loadingComponent from "../../components/LottieJSON/loading.json";
+import moment from "moment";
+import "moment/locale/id";
 
 const useStyles = makeStyles(componentStyles);
 
@@ -60,7 +62,7 @@ const ArticleView = (props) => {
         <Card classes={{ root: classes.cardRoot }}>
           <CardHeader
             className={classes.cardHeader}
-            title="Kategori Artikel"
+            title="Artikel"
             titleTypographyProps={{
               component: Box,
               marginBottom: "0!important",
@@ -158,7 +160,7 @@ const ArticleView = (props) => {
                             alt="..."
                             src={auth && userData.photoURL}
                           /> */}
-                          {auth && userData?.displayName}
+                          {userData?.displayName ?? '-'}
                         </TableCell>
                         <TableCell classes={{ root: classes.tableCellRoot }}>
                           {/* <Avatar
@@ -177,7 +179,9 @@ const ArticleView = (props) => {
                           {/* {item.judul} */}
                         </TableCell>
                         <TableCell classes={{ root: classes.tableCellRoot }}>
-                          {item.time.replace('pukul ','').replace('.',':')}
+                          {(item?.time?.includes('am') || item?.time?.includes('pm'))
+                            ? moment(item.time, 'DD-MM-YYYY hh:mm a').format('LLL').replace('pukul', '').replace('.', ':')
+                            : moment(item.time, 'LLL').format('LLL').replace('pukul', '').replace('.', ':')}
                         </TableCell>
                         <TableCell classes={{ root: classes.tableCellRoot }}>
                           <Link
