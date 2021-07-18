@@ -257,6 +257,7 @@ export const deleteUser = (id, urlImage) => {
             });
             dispatch({
               type: AUTH_DELETE,
+              id: id
             });
           })
           .catch((err) => {

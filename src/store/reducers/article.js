@@ -3,8 +3,8 @@ import {
   ARTICLE_FAIL,
   ARTICLE_FETCH,
   ARTICLE_START,
-  //   CATEGORY_DELETE,
-  //   CATEGORY_UPDATE,
+  ARTICLE_DELETE,
+  ARTICLE_UPDATE
 } from "../actions/article";
 
 import Article from '../../models/Article'
@@ -35,11 +35,6 @@ export default (state = initialState, action) => {
         error: null,
       };
     case ARTICLE_CREATE:
-      // const category = new Category(
-      //   action.payload.id,
-      //   action.payload.name,
-      //   action.payload.image
-      // );
       const article = new Article(
         action.payload.id,
         action.payload.actionView,
@@ -57,7 +52,38 @@ export default (state = initialState, action) => {
         ...state,
         loading: false,
         article: state.article.concat(article),
+        error: null
       };
+    case ARTICLE_UPDATE:
+      const articleIndex = state.article.findIndex(art => art.id === action.id)
+      const articleUpdate = new Article(
+        action.id,
+        action.payload.actionView,
+        action.payload.hashtag,
+        action.payload.idCategory,
+        action.payload.idPenulis,
+        action.payload.imageUrl,
+        action.payload.judul,
+        action.payload.partOne,
+        action.payload.partTwo,
+        action.payload.partThree,
+        action.payload.time
+      )
+      const updatedArticle = [...state.article]
+      updatedArticle[articleIndex] = articleUpdate
+      return {
+        ...state,
+        article: updatedArticle,
+        loading: false,
+        error: null
+      }
+    case ARTICLE_DELETE:
+      return {
+        ...state,
+        article: state.article.filter(art => art.id !== action.id),
+        loading: false,
+        error: null
+      }
     default:
       return state;
   }

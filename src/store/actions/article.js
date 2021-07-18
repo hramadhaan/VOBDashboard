@@ -109,6 +109,7 @@ export const addArticle = (data) => {
               })
               .then((res) => {
                 const id = res.key;
+                swal('Berhasil ditambahkan', 'Anda berhasil menambahkan artikel', 'success')
                 dispatch({
                   type: ARTICLE_CREATE,
                   payload: {
@@ -146,7 +147,7 @@ export const updateArticle = (id, data, oldImage) => {
     const selectedArticle = stateArticle.find((cat) => cat.id === id);
     // console.log("State: ", idCategory);
 
-    console.log('Data Picture: ', data.imageUrl)
+    // console.log('Data Picture: ', data.imageUrl)
 
     let url;
 
@@ -166,7 +167,7 @@ export const updateArticle = (id, data, oldImage) => {
                 firebaseDatabase(id)
                   .update({
                     judul: data.judul ? data.judul : selectedArticle.judul,
-                    imageUrl: res,
+                    imageUrl: url,
                     hashtag: data.hashtag
                       ? data.hashtag
                       : selectedArticle.hashtag,
@@ -188,7 +189,7 @@ export const updateArticle = (id, data, oldImage) => {
                         judul: data.judul
                           ? data.judul
                           : selectedArticle.judul,
-                        imageUrl: res,
+                        imageUrl: url,
                         hashtag: data.hashtag
                           ? data.hashtag
                           : selectedArticle.hashtag,

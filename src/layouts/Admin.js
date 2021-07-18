@@ -13,7 +13,7 @@ import Container from "@material-ui/core/Container";
 
 // core components
 import AdminNavbar from "components/Navbars/AdminNavbar.js";
-import AdminFooter from "components/Footers/AdminFooter.js";
+// import AdminFooter from "components/Footers/AdminFooter.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 import NavbarDropdown from "components/Dropdowns/NavbarDropdown.js";
 
@@ -102,7 +102,7 @@ const Admin = () => {
             component={Box}
             classes={{ root: classes.containerRoot }}
           >
-            <AdminFooter />
+           <Box component="footer" width="100%" padding="2.5rem 0"></Box>
           </Container>
         </Box>
       </>
