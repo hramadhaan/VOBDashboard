@@ -1,9 +1,12 @@
+import User from "models/User";
 import {
   AUTH_FAIL,
   AUTH_LOGIN,
   AUTH_LOGOUT,
   AUTH_START,
   AUTH_FETCH,
+  AUTH_DELETE,
+  AUTH_UPDATE
 } from "../actions/auth";
 
 const initialState = {
@@ -60,6 +63,30 @@ export default (state = initialState, action) => {
         loading: false,
         error: null,
       };
+    case AUTH_UPDATE:
+      const authIndex = state.users.findIndex(auth => auth.id === action.id)
+      const authUpdate = new User(
+        action.id,
+        action.payload.photoURL,
+        action.payload.email,
+        action.payload.displayName,
+        action.payload.typeUser
+      )
+      const updatedAuth = [...state.users]
+      updatedAuth[authIndex] = authUpdate
+      return {
+        ...state,
+        users: updatedAuth,
+        loading: false,
+        error: null
+      }
+    case AUTH_DELETE:
+      return {
+        ...state,
+        users: state.users.filter(user => user.id !== action.id),
+        loading: false,
+        error: null
+      }
     default:
       return state;
   }

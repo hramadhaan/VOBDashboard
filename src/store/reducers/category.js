@@ -3,8 +3,8 @@ import {
   CATEGORY_FAIL,
   CATEGORY_FETCH,
   CATEGORY_START,
-  //   CATEGORY_DELETE,
-  //   CATEGORY_UPDATE,
+  CATEGORY_DELETE,
+  CATEGORY_UPDATE,
 } from "../actions/category";
 import Category from "../../models/Category";
 
@@ -44,6 +44,28 @@ export default (state = initialState, action) => {
         loading: false,
         category: state.category.concat(category),
       };
+    case CATEGORY_UPDATE:
+      const categoryIndex = state.category.findIndex(cat => cat.id === action.id)
+      const categoryUpdate = new Category(
+        action.id,
+        action.payload.name,
+        action.payload.image
+      );
+      const updatedCategory = [...state.category]
+      updatedCategory[categoryIndex] = categoryUpdate
+      return {
+        ...state,
+        category: updatedCategory,
+        loading: false,
+        error: null
+      }
+    case CATEGORY_DELETE:
+      return {
+        ...state,
+        category: state.category.filter(cat => cat.id !== action.id),
+        loading: false,
+        error: null
+      }
     default:
       return state;
   }
