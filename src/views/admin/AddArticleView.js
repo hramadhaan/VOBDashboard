@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
-import { useTheme } from "@material-ui/core/styles";
 
 // core components
 import componentStyles from "assets/theme/views/admin/profile.js";
@@ -31,7 +30,6 @@ const useStyles = makeStyles(componentStyles);
 
 const AddArticleView = (props) => {
   const classes = useStyles();
-  const theme = useTheme();
 
   const cardContentClasses = { root: classes.cardContent };
 

@@ -54,6 +54,7 @@ function Login() {
                 Masuk dengan E-Mail dan Password
               </Box>
             </Box>
+            {/* <Button onClick={() => showModal(true)}>Register</Button> */}
             <Box
               color={theme.palette.gray[600]}
               textAlign="center"

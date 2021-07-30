@@ -164,7 +164,6 @@ function Dashboard() {
                       (user) => user.uid === item.idPenulis
                     );
 
-                    console.log("UserData: ", userData);
                     return (
                       <TableRow key={`item-table=${index}`}>
                         <TableCell classes={{ root: classes.tableCellRoot }}>
