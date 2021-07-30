@@ -180,6 +180,7 @@ export const updateArticle = (id, data, oldImage) => {
                     partThree: data.partThree
                       ? data.partThree
                       : selectedArticle.partThree,
+                    countView: 0,
                   })
                   .then((res) => {
                     dispatch({
@@ -242,6 +243,7 @@ export const updateArticle = (id, data, oldImage) => {
           partThree: data.partThree
             ? data.partThree
             : selectedArticle.partThree ?? '',
+          countView: 0,
         })
         .then(() => {
           swal({
