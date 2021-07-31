@@ -90,7 +90,7 @@ export const register = (email, password, name, image) => {
                   displayName: name,
                   email: email,
                   photoURL: res,
-                  typeUser: 1,
+                  typeUser: "1",
                   uid: user.uid,
                 }).then(() => {
                   swal({
