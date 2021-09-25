@@ -159,7 +159,7 @@ const ArticleView = (props) => {
                             alt="..."
                             src={auth && userData.photoURL}
                           /> */}
-                          {userData?.displayName ?? '-'}
+                          {userData?.displayName || item.penulis || '-'}
                         </TableCell>
                         <TableCell classes={{ root: classes.tableCellRoot }}>
                           {/* <Avatar

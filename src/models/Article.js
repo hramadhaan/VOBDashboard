@@ -10,7 +10,8 @@ class Article {
     partOne,
     partTwo,
     partThree,
-    time
+    time,
+    penulis
   ) {
     this.id = id;
     this.countView = countView;
@@ -23,6 +24,7 @@ class Article {
     this.partTwo = partTwo;
     this.partThree = partThree;
     this.time = time;
+    this.penulis = penulis;
   }
 }
 

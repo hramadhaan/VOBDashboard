@@ -49,7 +49,8 @@ export const fetchArticle = () => {
               data.partOne,
               data.partTwo,
               data.partThree,
-              data.timeStamp
+              data.timeStamp,
+              data.penulis
             )
           );
         });
@@ -109,7 +110,11 @@ export const addArticle = (data) => {
               })
               .then((res) => {
                 const id = res.key;
-                swal('Berhasil ditambahkan', 'Anda berhasil menambahkan artikel', 'success')
+                swal(
+                  "Berhasil ditambahkan",
+                  "Anda berhasil menambahkan artikel",
+                  "success"
+                );
                 dispatch({
                   type: ARTICLE_CREATE,
                   payload: {
@@ -152,7 +157,6 @@ export const updateArticle = (id, data, oldImage) => {
     let url;
 
     if (data.imageUrl) {
-
       firebaseStorage(data.imageUrl.name)
         .put(data.imageUrl)
         .on(
@@ -187,9 +191,7 @@ export const updateArticle = (id, data, oldImage) => {
                       type: ARTICLE_UPDATE,
                       id: id,
                       payload: {
-                        judul: data.judul
-                          ? data.judul
-                          : selectedArticle.judul,
+                        judul: data.judul ? data.judul : selectedArticle.judul,
                         imageUrl: url,
                         hashtag: data.hashtag
                           ? data.hashtag
@@ -236,13 +238,13 @@ export const updateArticle = (id, data, oldImage) => {
     } else {
       firebaseDatabase(id)
         .update({
-          judul: data.judul ? data.judul : selectedArticle.judul ?? '',
-          hashtag: data.hashtag ? data.hashtag : selectedArticle.hashtag ?? '',
-          partOne: data.partOne ? data.partOne : selectedArticle.partOne ?? '',
-          partTwo: data.partTwo ? data.partTwo : selectedArticle.partTwo ?? '',
+          judul: data.judul ? data.judul : selectedArticle.judul ?? "",
+          hashtag: data.hashtag ? data.hashtag : selectedArticle.hashtag ?? "",
+          partOne: data.partOne ? data.partOne : selectedArticle.partOne ?? "",
+          partTwo: data.partTwo ? data.partTwo : selectedArticle.partTwo ?? "",
           partThree: data.partThree
             ? data.partThree
-            : selectedArticle.partThree ?? '',
+            : selectedArticle.partThree ?? "",
           countView: 0,
         })
         .then(() => {
