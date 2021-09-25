@@ -113,7 +113,9 @@ const AddArticleView = (props) => {
     });
   };
 
+  
   const renderContent = () => {
+    console.log('DATA: ', {selectedData})
     return (
       <Card
         classes={{
@@ -178,8 +180,8 @@ const AddArticleView = (props) => {
             {selectedData ? <FilledInput
               type="text"
               disabled
-              value={selectedData && selectedData.idPenulis}
-              defaultValue={selectedData && selectedData.idPenulis}
+              value={selectedData && selectedData.idPenulis || selectedData.penulis}
+              defaultValue={selectedData && selectedData.idPenulis || selectedData.penulis}
             /> : <Select
               onChange={(event) => {
                 setData({
